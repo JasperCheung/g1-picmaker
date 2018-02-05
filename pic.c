@@ -7,12 +7,15 @@
 
 int main(){
   srand(time(NULL));
-  int r = 255; //this
-  int g = 99; //is
-  int b = 71;//tomato
+  int rT = 255; //this
+  int gT = 99; //is
+  int bT = 71;//tomato
+  int r = 71; //complementary color
+  int g = 227;
+  int b = 255;
   char line[23];
-
-  float g_over_b = 99/71;
+  float r_over_g = 71.0/227;
+  float bT_over_gT = 71.0/99;
   
   int fd = open("pic.ppm",  O_CREAT | O_WRONLY, 0777);
   write(fd, "P3\n", sizeof("P3\n"));
@@ -21,10 +24,22 @@ int main(){
 
   //drawing
   for( int pixie = 0; pixie < 600 * 600; pixie++){
-    g = 99 + ((rand() % 66) - 33);
-    b = (int) g * g_over_b;
+    if ( rand() % 5){//tomato
+      gT = 99 + ((rand() % 70) - 35);
+      bT = (int) (gT * bT_over_gT);
       
-    sprintf(line, "255 %d %d ", g, b);
+      sprintf(line, "255 %d %d ", gT, bT);
+    
+    }else{//not tomate
+      g = 227 + ((rand() % 40) - 21);
+      r = (int) (b * r_over_g);
+      sprintf(line, "%d %d 255 ", r,g );
+      
+    }
+      
+      
+    
+
     write(fd, line, sizeof(line));
   }
 
